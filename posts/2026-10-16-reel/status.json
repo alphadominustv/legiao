@@ -1,9 +1,1 @@
-{
- "status": "recusado",
- "tipo": "reel",
- "dia": "2026-10-16",
- "pasta": "2026-10-16-reel",
- "horario": 12,
- "aguardando_motivo": false,
- "recusado_em": "2026-10-16T01:05:21.104255-03:00"
-}
+{"status": "pendente", "tipo": "reel", "dia": "2026-10-16", "pasta": "2026-10-16-reel", "horario": 12}
