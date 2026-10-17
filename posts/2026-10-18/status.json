@@ -1,1 +1,9 @@
-{"status": "pendente", "tipo": "carrossel", "dia": "2026-10-18", "pasta": "2026-10-18", "horario": 18}
+{
+ "status": "recusado",
+ "tipo": "carrossel",
+ "dia": "2026-10-18",
+ "pasta": "2026-10-18",
+ "horario": 18,
+ "aguardando_motivo": true,
+ "recusado_em": "2026-10-17T14:33:40.902328-03:00"
+}
