@@ -4,7 +4,7 @@ Time de agentes que faz o Reel e o carrossel diários do Alpha Dominus e posta n
 depois que alguém do grupo aprova no Telegram.
 
 - **legiao/**: Odin (tema), Bragi (texto), Atena (revisa), Hefesto (arte) e Íris (posta).
-- **servidor.py**: roda no Render e atende os botões ✅/❌, o motivo da recusa, `/agenda` e `/id`.
+- **servidor.py**: roda no Render e atende os botões ✅/❌, o motivo da recusa, `/agenda`, `/reenviar` (manda de novo o que espera aprovação), `/aprovartudo` e `/id`.
   O endereço `/tick` é chamado pelo cron-job.org a cada 5 minutos: gera os posts no horário e posta o que já foi aprovado.
 - **Branch legiao-posts**: cada post gerado (imagens, vídeo, texto e situação). O Instagram lê as imagens
   daqui, por isso o repositório é público. Os segredos ficam guardados nas configurações e não aparecem.

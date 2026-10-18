@@ -174,6 +174,91 @@ def agenda():
     return "📅 Agenda da Legião\n\n" + "\n\n".join(linhas + faltam)
 
 
+def _pendentes(incluir_recusados=False):
+    """Posts de hoje em diante que ainda não foram aprovados (pastas + status)."""
+    hoje = datetime.now(BRT).strftime("%Y-%m-%d")
+    try:
+        pastas = [x["name"] for x in http(_gh("posts") + f"?ref={BRANCH}", cabecalhos=GH) if x.get("type") == "dir"]
+    except RuntimeError:
+        pastas = []
+    saida = []
+    for pasta in sorted((p for p in pastas if p[:10] >= hoje), key=lambda p: (p[:10], not p.endswith("-reel"))):
+        status, sha = ler_status(pasta)
+        if status and (status.get("status") == "pendente" or (incluir_recusados and status.get("status") == "recusado")):
+            saida.append((pasta, status, sha))
+    return saida
+
+
+def reenviar():
+    """/reenviar: manda de novo, com os botões ✅/❌, o que ainda espera aprovação (e o que foi recusado)."""
+    lista = _pendentes(incluir_recusados=True)
+    if not lista:
+        avisar("Nada esperando aprovação agora. Use /agenda para ver o que está agendado.")
+        return
+    for pasta, status, _ in lista:
+        base = f"https://raw.githubusercontent.com/{REPO}/{BRANCH}/posts/{pasta}"
+        try:
+            post = ler_post(pasta)
+        except Exception:
+            post = {}
+        dia = status.get("dia", pasta[:10])
+        d = datetime.strptime(dia, "%Y-%m-%d")
+        nome = "Reel" if status.get("tipo") == "reel" else "Carrossel"
+        cabeca = f"{'🎬' if nome == 'Reel' else '🦁'} {nome} de {DIAS[d.weekday()]} {dia[8:10]}/{dia[5:7]} · posta às {status.get('horario', 18)}h"
+        if status.get("status") == "recusado":
+            cabeca += "\n❌ Foi recusado. Se mudou de ideia, aperte ✅."
+        try:
+            if nome == "Reel":
+                tg("sendVideo", {"chat_id": CHAT, "video": f"{base}/reel.mp4", "caption": cabeca[:1000]})
+            else:
+                n = len(post.get("slides") or []) or 10
+                fotos = []
+                for i in range(1, n + 1):
+                    url = f"{base}/{i:02d}.jpg"
+                    try:
+                        urllib.request.urlopen(urllib.request.Request(url, method="HEAD"), timeout=20).close()
+                    except Exception:
+                        break
+                    fotos.append({"type": "photo", "media": url})
+                if fotos:
+                    fotos[0]["caption"] = cabeca[:1000]
+                    tg("sendMediaGroup", {"chat_id": CHAT, "media": fotos[:10]})
+        except RuntimeError as erro:
+            avisar(f"⚠️ Não consegui reenviar a mídia de {pasta}: {str(erro)[:150]}")
+        legenda = post.get("legenda", "")
+        texto = f"{cabeca}\n\n📝 Legenda:\n\n{legenda}"[:4000]
+        tg("sendMessage", {"chat_id": CHAT, "text": texto, "disable_web_page_preview": True,
+                           "reply_markup": {"inline_keyboard": [[{"text": "✅ Aprovar", "callback_data": f"lg:ok:{pasta}"},
+                                                                 {"text": "❌ Recusar", "callback_data": f"lg:no:{pasta}"}]]}})
+
+
+def aprovar_tudo(quem=""):
+    """/aprovartudo: aprova de uma vez tudo que está esperando aprovação (os recusados ficam como estão)."""
+    lista = _pendentes()
+    if not lista:
+        avisar("Nada esperando aprovação agora. Se quiser aprovar algo recusado, use /reenviar e aperte ✅.")
+        return
+    agora = datetime.now(BRT)
+    hoje = agora.strftime("%Y-%m-%d")
+    linhas, venceu = [], False
+    for pasta, status, sha in lista:
+        status["status"], status["aguardando_motivo"] = "aprovado", False
+        gravar_status(pasta, status, sha)
+        dia = status.get("dia", pasta[:10])
+        h = int(status.get("horario", 18))
+        venceu = venceu or dia < hoje or (dia == hoje and agora.hour >= h)
+        nome = "Reel" if status.get("tipo") == "reel" else "Carrossel"
+        linhas.append(f"✅ {nome} {dia[8:10]}/{dia[5:7]} às {h}h")
+        if status.get("tipo") == "reel":
+            try:
+                gerar_carrossel_do_dia(dia)
+            except Exception as erro:
+                print("Legião: carrossel do dia:", str(erro)[:200])
+    if venceu and os.environ.get("RENDER"):
+        disparar("iris.yml")
+    avisar(("Aprovado por " + quem + ":\n" if quem else "Aprovado:\n") + "\n".join(linhas))
+
+
 def tratar_update(u):
     """Um clique em ✅/❌ ou uma mensagem sua no bot da Legião. Roda no Render (na hora, via webhook)
     ou no GitHub Actions (a cada ciclo, via getUpdates, se o webhook não estiver ligado)."""
@@ -184,6 +269,13 @@ def tratar_update(u):
         return
     if texto.split("@")[0].strip() in ("/agenda", "/agendados") and str(msg.get("chat", {}).get("id")) == str(CHAT):
         tg_tanto_faz("sendMessage", {"chat_id": CHAT, "text": agenda(), "disable_web_page_preview": True})
+        return
+    comando = texto.split("@")[0].strip()
+    if comando in ("/reenviar", "/aprovartudo") and str(msg.get("chat", {}).get("id")) == str(CHAT):
+        if comando == "/reenviar":
+            reenviar()
+        else:
+            aprovar_tudo((msg.get("from") or {}).get("first_name", "") if str(CHAT).startswith("-") else "")
         return
     no_grupo = str(CHAT).startswith("-")
     # vale quem está no chat da Legião: o seu privado ou o grupo dos sócios (no grupo, só respostas ao bot)

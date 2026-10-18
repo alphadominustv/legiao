@@ -1,6 +1,6 @@
 """Servidor da Legião Alpha no Render (só biblioteca padrão do Python).
 
-  POST /legiao  webhook do bot da Legião: botões ✅/❌, o motivo da recusa, /agenda e /id, na hora
+  POST /legiao  webhook do bot da Legião: botões ✅/❌, o motivo da recusa, /agenda, /reenviar, /aprovartudo e /id
   GET  /tick    o cron-job.org abre de 5 em 5 minutos: gera o Reel/carrossel no horário (legiao.yml)
                 e manda a Íris postar o que já foi aprovado e chegou a hora (iris.yml)
   GET  /        "ok" (para saber se está no ar)
@@ -16,7 +16,7 @@ import threading
 import time
 import urllib.request
 from datetime import datetime, timedelta
-from http.server import BaseHTTPRequestHandler, HTTPServer
+from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "legiao"))
 os.environ.setdefault("GITHUB_REPOSITORY", "alphadominustv/legiao")
@@ -117,6 +117,8 @@ def ligar_webhook():
         telegram("setWebhook", {"url": base.rstrip("/") + "/legiao", "secret_token": SEGREDO,
                                 "allowed_updates": ["message", "callback_query"]})
         comandos = [{"command": "agenda", "description": "O que já está gerado e agendado"},
+                    {"command": "reenviar", "description": "Manda de novo o que espera aprovação"},
+                    {"command": "aprovartudo", "description": "Aprova tudo que espera aprovação"},
                     {"command": "id", "description": "Mostra o Id deste chat"}]
         for escopo in ({"type": "default"}, {"type": "all_group_chats"}):
             telegram("setMyCommands", {"commands": comandos, "scope": escopo})
@@ -132,4 +134,4 @@ if __name__ == "__main__":
     ligar_webhook()
     porta = int(os.environ.get("PORT", "10000"))
     log(f"Servidor da Legião na porta {porta}.")
-    HTTPServer(("0.0.0.0", porta), Atendente).serve_forever()
+    ThreadingHTTPServer(("0.0.0.0", porta), Atendente).serve_forever()
