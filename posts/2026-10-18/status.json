@@ -1,9 +1,11 @@
 {
- "status": "publicando",
+ "status": "publicado",
  "tipo": "carrossel",
  "dia": "2026-10-18",
  "pasta": "2026-10-18",
  "horario": 18,
  "aguardando_motivo": false,
- "recusado_em": "2026-10-17T14:33:40.902328-03:00"
+ "recusado_em": "2026-10-17T14:33:40.902328-03:00",
+ "instagram": "18089253254495485",
+ "facebook": "997796546742674_122138013285244634"
 }
