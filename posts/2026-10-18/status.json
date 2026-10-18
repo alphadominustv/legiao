@@ -1,9 +1,9 @@
 {
- "status": "recusado",
+ "status": "aprovado",
  "tipo": "carrossel",
  "dia": "2026-10-18",
  "pasta": "2026-10-18",
  "horario": 18,
- "aguardando_motivo": true,
+ "aguardando_motivo": false,
  "recusado_em": "2026-10-17T14:33:40.902328-03:00"
 }
