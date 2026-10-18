@@ -1,0 +1,26 @@
+{
+ "horarios": [
+  15
+ ],
+ "modelo": "sonnet",
+ "cta": "SEGREDO, MENTE, CARTAS ou CHAVE",
+ "frames_min": 5,
+ "frames_max": 7,
+ "rodadas_revisao": 2,
+ "horario_post": 18,
+ "reel": {
+  "horarios": [
+   9
+  ],
+  "horario_post": 12,
+  "pasta_videos_drive": "1ljIsNDogaEy8kLh4GeLjXQqZlnELqfRZ",
+  "pasta_musicas_drive": "1C4R3RmpyRv3i-iVyzXX2ecmAJFUSCsvR",
+  "duracao_video": 5,
+  "duracao_final": 2,
+  "max_caracteres_frase": 110,
+  "escurecer": 0.45
+ },
+ "modelo_gemini": "gemini-flash-latest",
+ "preco_gemini_entrada": 0.75,
+ "preco_gemini_saida": 3.75
+}
