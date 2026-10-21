@@ -4,6 +4,6 @@
  "dia": "2026-10-21",
  "pasta": "2026-10-21-reel",
  "horario": 12,
- "aguardando_motivo": true,
+ "aguardando_motivo": false,
  "recusado_em": "2026-10-21T09:58:36.330104-03:00"
 }
