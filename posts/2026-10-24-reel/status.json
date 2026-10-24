@@ -1,1 +1,8 @@
-{"status": "pendente", "tipo": "reel", "dia": "2026-10-24", "pasta": "2026-10-24-reel", "horario": 12}
+{
+ "status": "aprovado",
+ "tipo": "reel",
+ "dia": "2026-10-24",
+ "pasta": "2026-10-24-reel",
+ "horario": 12,
+ "aguardando_motivo": false
+}
