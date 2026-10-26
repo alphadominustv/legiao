@@ -356,7 +356,6 @@ def main():
     arquivos = carrossel.gerar(post["slides"], SAIDA)
     status = "✅ Aprovado pela Atena" if aprovado else "⛔ A Atena REPROVOU (não postar):\n" + "\n".join(f"• {m}" for m in motivos)
     fotos(arquivos, f"🦁 Legião Alpha – {base['DATA']}\nTema: {post.get('tema', '')}")
-    fotos(arquivos, "Arquivos em qualidade máxima, pra postar", "document")
     dia = agora.strftime("%Y-%m-%d")
     (SAIDA / "status.json").write_text(json.dumps({"status": "pendente" if aprovado else "recusado", "tipo": "carrossel", "dia": dia, "pasta": dia,
                                                    "horario": CFG.get("horario_post", 18)}), encoding="utf-8")
