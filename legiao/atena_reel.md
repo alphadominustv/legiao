@@ -9,6 +9,9 @@ Revise o Reel abaixo (a "frase" aparece na tela sobre um clipe, a "legenda" vai 
 4. Português errado ou frase confusa.
 5. Legenda que termina cortada ou solta; sem chamada de ação pro curso com uma das palavras-chave ({CTA}); ou sem a linha do canal de promoções no link da bio. A palavra "achados" é proibida.
 6. Tema repetido destes já postados: {HISTORICO}
+7. Não seguiu a "Variação de hoje": assunto, formato, ou repetiu o começo e as palavras dos últimos posts.
+
+{VARIACAO}
 
 Seja exigente, mas não reprove por gosto pessoal: só reprove por um problema concreto, e diga exatamente o que mudar.
 

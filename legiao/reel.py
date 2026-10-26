@@ -187,6 +187,7 @@ def main():
     temas = "\n".join(f"- {t}" for t in rodar.temas_postados(historico, reel=True)[-60:]) or "- (nenhum ainda)"
     base = {"DATA": agora.strftime("%d/%m/%Y"), "HISTORICO": temas, "CTA": CFG["cta"],
             "NICHO": (AQUI / "nicho.md").read_text(encoding="utf-8"), "MAX_FRASE": R["max_caracteres_frase"]}
+    base["VARIACAO"], formato = rodar.variacao(reel=True)
 
     # Primeiro o Drive: se a conta de serviço não enxergar as pastas, nem gasta Claude
     sessao = drive()
@@ -227,7 +228,7 @@ def main():
     dia = agora.strftime("%Y-%m-%d")
     pasta = f"{dia}-reel"
     (SAIDA / "post.json").write_text(json.dumps({**post, "tipo": "reel", "aprovado": aprovado, "data": base["DATA"],
-                                                "video": video["name"], "musica": musica["name"]},
+                                                "formato": formato, "video": video["name"], "musica": musica["name"]},
                                                ensure_ascii=False, indent=1), encoding="utf-8")
     teste = bool(os.environ.get("TESTE"))  # teste: só manda a prévia, não guarda nem pede aprovação
     if not teste:
