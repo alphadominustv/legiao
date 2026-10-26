@@ -22,5 +22,31 @@
  },
  "modelo_gemini": "gemini-flash-latest",
  "preco_gemini_entrada": 0.75,
- "preco_gemini_saida": 3.75
+ "preco_gemini_saida": 3.75,
+ "variacao": {
+  "pilares": {
+   "Mentalidade e disciplina (foco, rotina, solidão produtiva, construir o próprio império, sair da mediocridade)": 40,
+   "Autocuidado masculino (corpo, treino, sono, aparência, estilo, saúde mental sem vitimismo)": 25,
+   "Postura e respeito (ambientes, trabalho, leitura social, frame, ser levado a sério)": 20,
+   "Relacionamentos (desapego, não correr atrás, padrões, respeito próprio quando é ignorado)": 15
+  },
+  "formatos_reel": [
+   "Pergunta sobre uma situação + virada + promessa (ex.: \"Ela está sendo fria com você? Não implore. Mande isso e desapareça.\")",
+   "Afirmação dura que vai contra o senso comum, sem pergunta (ex.: \"Ninguém respeita o homem que pede desculpa por tudo.\")",
+   "Sinais: \"3 sinais de que você...\" (o número e os sinais ficam na legenda)",
+   "O erro: aponta um erro comum que o seguidor comete sem perceber e diz que a correção está no post",
+   "Cena curta do dia a dia em segunda pessoa, com hora ou lugar (ex.: \"Segunda, 6h. O despertador toca e você negocia consigo mesmo.\")",
+   "Contraste direto: \"O homem comum faz X. Você vai fazer Y.\"",
+   "Ordem seca + consequência, sem pergunta (ex.: \"Pare de anunciar seus planos. Deixe o resultado falar.\")"
+  ],
+  "formatos_carrossel": [
+   "Conceito com nome próprio (capa = nome do conceito; cada slide = um passo com nome)",
+   "Erros: capa \"Os erros que...\"; cada slide = um erro e como corrigir",
+   "Sinais: capa \"Sinais de que...\"; cada slide = um sinal e o que fazer",
+   "Mito x verdade: cada slide derruba uma crença comum e diz o que fazer",
+   "Um dia do homem que se respeita: da manhã à noite, cada slide = um momento do dia",
+   "Comum x quem se respeita: cada slide = uma situação, o que o homem comum faz e o que você faz",
+   "Perguntas: cada slide = uma pergunta dura que o seguidor precisa responder e a ação"
+  ]
+ }
 }

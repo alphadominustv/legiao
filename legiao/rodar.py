@@ -4,6 +4,8 @@ sem essa chave, usa o Claude Code na assinatura (CLAUDE_CODE_OAUTH_TOKEN)."""
 import base64
 import json
 import os
+import random
+import re
 import subprocess
 import sys
 import urllib.error
@@ -243,6 +245,72 @@ def temas_postados(historico, reel=False):
     return [t for t in temas if t]
 
 
+PALAVRAS_COMUNS = set("""como para quando você voce sobre mais estes estas este esta isso essa esse pelo pela
+seus suas homem homens qualquer sempre nunca antes depois ainda muito dentro respeito""".split())
+
+
+def posts_recentes(reel, quantos=10):
+    """Os últimos posts gerados (aprovados ou não), lidos da branch legiao-posts."""
+    repo = os.environ.get("GITHUB_REPOSITORY", "alphadominustv/legiao")
+    try:
+        req = urllib.request.Request(f"https://api.github.com/repos/{repo}/contents/posts?ref=legiao-posts",
+                                     headers={"Accept": "application/vnd.github+json", **(
+                                         {"Authorization": f"Bearer {os.environ['GITHUB_TOKEN']}"} if os.environ.get("GITHUB_TOKEN") else {})})
+        pastas = sorted(p["name"] for p in json.loads(urllib.request.urlopen(req, timeout=30).read())
+                        if p["type"] == "dir" and p["name"].endswith("-reel") == reel)
+    except Exception as erro:
+        print("não consegui ler os posts recentes:", str(erro)[:200])
+        return []
+    posts = []
+    for pasta in pastas[-quantos:]:
+        try:
+            url = f"https://raw.githubusercontent.com/{repo}/legiao-posts/posts/{pasta}/post.json"
+            posts.append(json.loads(urllib.request.urlopen(url, timeout=30).read()))
+        except Exception as erro:
+            print(f"pulei {pasta}:", str(erro)[:200])
+    return posts
+
+
+def variacao(reel=False):
+    """Sorteia o assunto e o formato do dia e mostra à IA como foram os últimos posts,
+    pra ela não escrever sempre do mesmo jeito. Devolve (texto pro prompt, formato sorteado)."""
+    V = CFG.get("variacao") or {}
+    recentes = posts_recentes(reel)
+    formatos = V.get("formatos_reel" if reel else "formatos_carrossel") or [""]
+    usados = {p.get("formato") for p in recentes[-3:]}
+    formato = random.choice([f for f in formatos if f not in usados] or formatos)
+    pilares = V.get("pilares") or {}
+    pilar = random.choices(list(pilares), weights=list(pilares.values()))[0] if pilares else ""
+
+    if reel:
+        exemplos = [p.get("frase", "") for p in recentes]
+    else:
+        exemplos = [" / ".join(s.get("titulo", "") for s in (p.get("slides") or [])[:3]) for p in recentes]
+    aberturas = [(p.get("legenda") or "").split("\n")[0] for p in recentes]
+    textos = [p.get("tema", "") for p in recentes] + exemplos
+    contagem = {}
+    for palavra in re.findall(r"[a-zà-ú]{5,}", " ".join(textos).lower()):
+        if palavra not in PALAVRAS_COMUNS:
+            contagem[palavra] = contagem.get(palavra, 0) + 1
+    gastas = [p for p, q in sorted(contagem.items(), key=lambda x: -x[1]) if q >= 3][:15]
+
+    linhas = ["# Variação de hoje (obrigatório, vale mais que o \"Estilo que funciona\" do nicho)"]
+    if pilar:
+        linhas.append(f"- Assunto de hoje: {pilar}. Escolha uma situação concreta DESSE assunto.")
+    if formato:
+        linhas.append(f"- Formato de hoje: {formato}.")
+    linhas.append("- O nome do tema NÃO precisa começar com \"O Código\", \"O Protocolo\", \"A Lei\" ou \"O Princípio\": "
+                  "use isso no máximo de vez em quando.")
+    if exemplos:
+        linhas.append("- Os últimos posts foram assim. NÃO repita a estrutura, o começo nem a promessa deles:\n"
+                      + "\n".join(f"  • {e}" for e in exemplos if e))
+    if aberturas:
+        linhas.append("- A legenda NÃO pode começar parecido com estas:\n" + "\n".join(f"  • {a}" for a in aberturas if a))
+    if gastas:
+        linhas.append("- Palavras que já cansaram (evite): " + ", ".join(gastas) + ".")
+    return "\n".join(linhas), formato
+
+
 def main():
     if not (os.environ.get("GEMINI_LEGIAO_KEY") or os.environ.get("CLAUDE_CODE_OAUTH_TOKEN")):
         print("Falta o secret GEMINI_LEGIAO_KEY (ou CLAUDE_CODE_OAUTH_TOKEN); a Legião não roda.")
@@ -255,6 +323,7 @@ def main():
     base = {"DATA": agora.strftime("%d/%m/%Y"), "HISTORICO": temas, "CTA": CFG["cta"],
             "NICHO": (AQUI / "nicho.md").read_text(encoding="utf-8"),
             "FRAMES_MIN": CFG["frames_min"], "FRAMES_MAX": CFG["frames_max"]}
+    base["VARIACAO"], formato = variacao()
 
     pedido = pedido_de_refazer()
     correcoes, post, motivos = pedido, None, []
@@ -276,7 +345,7 @@ def main():
 
     aprovado = not motivos
     SAIDA.mkdir(exist_ok=True)
-    (SAIDA / "post.json").write_text(json.dumps({**post, "aprovado": aprovado, "data": base["DATA"]},
+    (SAIDA / "post.json").write_text(json.dumps({**post, "aprovado": aprovado, "data": base["DATA"], "formato": formato},
                                                 ensure_ascii=False, indent=1), encoding="utf-8")
     if validar_formato(post):
         mensagem("⚠️ Legião: não consegui montar o carrossel hoje.\n\n" + "\n".join(motivos) + "\n\n" + consumo())
