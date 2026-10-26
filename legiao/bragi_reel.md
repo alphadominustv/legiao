@@ -11,7 +11,7 @@ Vídeo vertical curto: um clipe de fundo escurecido com UMA FRASE na tela, depoi
 {HISTORICO}
 
 # O ODIN escolhe o tema
-Siga a mistura de temas do nicho (puxe mais pra motivação, disciplina e autocuidado). Uma situação concreta que o seguidor vive, com gancho.
+Use o assunto de hoje (veja "Variação de hoje"): atração e conquista, sempre pelo lado do homem melhorar a si mesmo. Uma situação concreta com ela, com gancho.
 
 # O BRAGI escreve
 - "frase": o texto na tela, no FORMATO DE HOJE (veja "Variação de hoje"), que dê vontade de abrir a legenda. Máximo {MAX_FRASE} caracteres. Sem emoji, sem hashtag. NÃO mande ler a legenda ("a legenda mostra como", "veja na legenda"): o vídeo já termina com "Leia a Legenda >>>".

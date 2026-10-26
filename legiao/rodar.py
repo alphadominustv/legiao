@@ -279,7 +279,7 @@ def variacao(reel=False):
     formatos = V.get("formatos_reel" if reel else "formatos_carrossel") or [""]
     usados = {p.get("formato") for p in recentes[-3:]}
     formato = random.choice([f for f in formatos if f not in usados] or formatos)
-    pilares = V.get("pilares") or {}
+    pilares = (reel and V.get("pilares_reel")) or V.get("pilares") or {}
     pilar = random.choices(list(pilares), weights=list(pilares.values()))[0] if pilares else ""
 
     if reel:
@@ -295,6 +295,8 @@ def variacao(reel=False):
     gastas = [p for p, q in sorted(contagem.items(), key=lambda x: -x[1]) if q >= 3][:15]
 
     linhas = ["# Variação de hoje (obrigatório, vale mais que o \"Estilo que funciona\" do nicho)"]
+    if reel and V.get("reel_aviso"):
+        linhas.append("- " + V["reel_aviso"])
     if pilar:
         linhas.append(f"- Assunto de hoje: {pilar}. Escolha uma situação concreta DESSE assunto.")
     if formato:

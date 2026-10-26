@@ -31,13 +31,13 @@
    "Relacionamentos (desapego, não correr atrás, padrões, respeito próprio quando é ignorado)": 15
   },
   "formatos_reel": [
-   "Pergunta sobre uma situação + virada + promessa (ex.: \"Ela está sendo fria com você? Não implore. Mande isso e desapareça.\")",
-   "Afirmação dura que vai contra o senso comum, sem pergunta (ex.: \"Ninguém respeita o homem que pede desculpa por tudo.\")",
-   "Sinais: \"3 sinais de que você...\" (o número e os sinais ficam na legenda)",
-   "O erro: aponta um erro comum que o seguidor comete sem perceber e diz que a correção está no post",
-   "Cena curta do dia a dia em segunda pessoa, com hora ou lugar (ex.: \"Segunda, 6h. O despertador toca e você negocia consigo mesmo.\")",
-   "Contraste direto: \"O homem comum faz X. Você vai fazer Y.\"",
-   "Ordem seca + consequência, sem pergunta (ex.: \"Pare de anunciar seus planos. Deixe o resultado falar.\")"
+   "Promessa com número: \"Faça essas 3 coisas e ela vai se apaixonar por você.\"",
+   "Dicas psicológicas: \"3 truques psicológicos que te deixam mais atraente pra ela.\"",
+   "Sinais dela: \"3 sinais de que ela está interessada em você.\"",
+   "O erro: \"O erro que faz ela perder o interesse em você.\"",
+   "Pergunta sobre ela + virada + promessa (ex.: \"Ela está sendo fria com você? Não implore. Mande isso e desapareça.\")",
+   "Cena curta com ela em segunda pessoa (ex.: \"Primeiro encontro. Ela olha pro celular. Não faça o que todo homem faz.\")",
+   "O que ela nota: \"O que ela repara em você antes mesmo de você falar.\""
   ],
   "formatos_carrossel": [
    "Conceito com nome próprio (capa = nome do conceito; cada slide = um passo com nome)",
@@ -47,6 +47,14 @@
    "Um dia do homem que se respeita: da manhã à noite, cada slide = um momento do dia",
    "Comum x quem se respeita: cada slide = uma situação, o que o homem comum faz e o que você faz",
    "Perguntas: cada slide = uma pergunta dura que o seguidor precisa responder e a ação"
-  ]
+  ],
+  "pilares_reel": {
+   "Atração: dicas psicológicas e de comportamento pra ele ficar mais atraente pra ela (postura, voz, olhar, mistério, cuidado pessoal)": 35,
+   "Conquista: o que fazer pra ela se interessar e se apaixonar (conversa, primeiro encontro, mensagens, quando sumir)": 25,
+   "Império que atrai: disciplina, foco, dinheiro e crescer o próprio império, SEMPRE ligado ao efeito nela (ex.: \"Construa seu império em silêncio e ela vai voltar sozinha.\")": 20,
+   "Relacionamento: não correr atrás, padrões, quando ela esfria, respeito próprio com ela": 12,
+   "Autocuidado pra atrair: corpo, estilo, perfume, aparência que chama a atenção dela": 8
+  },
+  "reel_aviso": "O clipe de fundo do Reel mostra uma MULHER. A frase tem que falar dela ou de atrair/conquistar uma mulher, pra combinar com o vídeo, com um toque de malícia. Pode falar de império, dinheiro ou disciplina, mas sempre justificando pelo efeito nela (ex.: \"Cresça em silêncio e ela vai notar.\")."
  }
 }
