@@ -1,8 +1,10 @@
 {
- "status": "publicando",
+ "status": "publicado",
  "tipo": "reel",
  "dia": "2026-10-27",
  "pasta": "2026-10-27-reel",
  "horario": 12,
- "aguardando_motivo": false
+ "aguardando_motivo": false,
+ "instagram": "18119198915068040",
+ "facebook": "1158328676863546"
 }
